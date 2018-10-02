@@ -14,9 +14,11 @@ class BookShelfItem extends React.Component {
 
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        //this.onRemove = this.onRemove.bind(this);
 
         this.state = {
-            show: false
+            show: false,
+            //alert: false
         };
     }
 
@@ -27,6 +29,12 @@ class BookShelfItem extends React.Component {
     handleShow() {
         this.setState({ show: true });
     }
+
+    /*handleAlert() {
+        this.setState({ alert: true});
+    }*/
+
+    //onRemove(bookObj, )
 
     render() {
 
@@ -47,7 +55,7 @@ class BookShelfItem extends React.Component {
         if (this.props.book.categories) {
             this.props.book.categories.forEach((category) => {
                 categories.push(
-                    <Badge>{category}</Badge>
+                    <Badge key={category}>{category}</Badge>
                 )
             })
         }
@@ -61,6 +69,7 @@ class BookShelfItem extends React.Component {
                 />
             )
         }
+
 
         let bookimg = (
 
@@ -84,7 +93,7 @@ class BookShelfItem extends React.Component {
                         <Button bsStyle="link" onClick={this.handleShow}>
                             <Glyphicon glyph='info-sign' />
                             more info
-                                </Button>
+                        </Button>
                     </div>
 
                 </Thumbnail>
@@ -94,7 +103,6 @@ class BookShelfItem extends React.Component {
         return (
             <div>
                 {bookimg}
-
                 <Modal show={this.state.show} onHide={this.handleClose}>
                     <Modal.Header closeButton>
                         <SelectMenu
@@ -105,25 +113,19 @@ class BookShelfItem extends React.Component {
                         />
                     </Modal.Header>
                     <Modal.Body>
-                    
                         {bookimg2}
                         <h3>{this.props.book.title}</h3>
                         <h4>{this.props.book.subtitle}</h4>
                         {authors}
                         {categories}
-                       
                         <div>
                             <hr />
                             {this.props.book.description}
                             <hr />
                         </div>
-
                     </Modal.Body>
                 </Modal>
-
-
             </div>
-
         )
     }
 }

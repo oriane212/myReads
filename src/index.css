@@ -10,7 +10,6 @@ div.col-xs-6 {
 
 .thumbnail {
   border: none;
-  /*width: 200px;*/
   margin: 32px;
 }
 
@@ -52,7 +51,6 @@ p {
 .btn-info {
   border: 2px solid white;
   color: #fff;
-  /* background-color: rgba(57, 175, 190, 1);*/
 }
 
 .btn-info.blue {
@@ -61,7 +59,6 @@ p {
   font-weight: 600;
   font-size: 12px;
 }
-
 
 .dropdown {
   position: absolute;
@@ -80,6 +77,16 @@ p {
 
 .booktitle {
   display: inline;
+}
+
+p.title {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+}
+
+div.alertMsg p {
+  color: #fff;
 }
 
 .badge {
@@ -135,6 +142,11 @@ ul.nav.navbar-nav {
 .navbar-default {
   border: none;
   height: 70px;
+  z-index: 15;
+  position: fixed;
+  top: 150px;
+  width: 100%;
+  opacity: 0.9;
 }
 
 p.info {
@@ -159,7 +171,44 @@ span.glyphicon.glyphicon-info-sign {
   margin-right: 4px;
 }
 
+.alert {
+  width: 100%;
+  position: fixed;
+  z-index: 1060;
+  top: 150px;
+  border-radius: 0;
+  background-color: rgba(0, 62, 84, .95);
+  border: none;
+  box-shadow: 0 3px 3px #323232;
+  color: #fff;
+}
 
+.alertMsg Button {
+  color: #fff;
+  background-color: #003e54;
+  width: 80px;
+  height: 28px;
+  margin-right: 16px;
+  text-transform: uppercase;
+  font-size: 0.7em;
+  letter-spacing: 1px;
+}
+
+.alert-dismissable button.close {
+  opacity: 0.9;
+}
+
+.alert-dismissable button.close:hover {
+  opacity: 1;
+  color: #fff;
+}
+
+div.scrollable-content {
+  position: absolute;
+  top: 270px;
+}
+
+/* MEDIA QUERIES */
 
 @media screen and (max-width: 767px) {
   .glyphicon.glyphicon-menu-left {
@@ -202,7 +251,6 @@ span.glyphicon.glyphicon-info-sign {
 
   }
 
-
 }
 
 @media screen and (max-width: 500px) {
@@ -232,6 +280,18 @@ span.glyphicon.glyphicon-info-sign {
     display: inline-block;
   }
 
+  .navbar-default {
+    top: 100px;
+  }
+
+  div.scrollable-content {
+    top: 220px;
+  }
+
+  .alert {
+    top: 100px;
+  }
+
 }
 
 @media screen and (max-width: 400px) {
@@ -241,7 +301,6 @@ span.glyphicon.glyphicon-info-sign {
 
   .container{
     width: 300px;
-
   }
 
   .thumbnail {

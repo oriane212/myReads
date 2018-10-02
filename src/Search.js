@@ -2,11 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import BookShelfItem from './BookShelfItem';
 import * as BooksAPI from './BooksAPI';
-import SelectMenu from './SelectMenu';
 import { Glyphicon } from 'react-bootstrap';
 import { Navbar } from 'react-bootstrap';
 import { Nav } from 'react-bootstrap';
-import { NavItem } from 'react-bootstrap';
 import { FormControl } from 'react-bootstrap';
 import { Grid } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
@@ -25,10 +23,8 @@ class Search extends React.Component {
 
     updateQuery(query) {
         this.setState({
-            //query: query.trim()
             query: query
         })
-        //console.log(this.state.query);
         this.updateResults(query);
 
     }
@@ -36,26 +32,27 @@ class Search extends React.Component {
     updateResults(query) {
         if (query) {
 
-            //const re = /\w+\s/g;
-            //let queryArray = query.match(re);
             let queryArray = query.split(' ');
             console.log(queryArray);
 
             if (queryArray.length > 1) {
-
                 let promises = [];
 
                 queryArray.forEach((searchTerm) => {
                     let eachPromise = (
                         BooksAPI.search(searchTerm)
                             .then((response) => {
+
+                                // TODO: handle errors properly with reject?
                                 if (response === undefined) {
+                                    console.log('undefined');
                                     return
                                 } else if (response.error) {
+                                    console.log('error');
                                     return
+
                                 } else {
                                     return response;
-                                    
                                 }
                             })
                     )
@@ -65,24 +62,17 @@ class Search extends React.Component {
 
                 })
 
-                //console.log(promises);
                 Promise.all(promises).then((values) => {
                     console.log(values);
                     let accume = [];
                     values.forEach((value) => {
-                        if (value != undefined) {
+                        if (value !== undefined) {
                             accume = accume.concat(value);
                         }
                     })
-                    //if (values) {
-                        //let accume = values[0].concat(values[1]);
-                        //console.log(accume);
-
-                        this.setState({
-                            results: accume
-                        })
-                    //}
-
+                    this.setState({
+                        results: accume
+                    })
                 })
 
             } else {
@@ -109,24 +99,72 @@ class Search extends React.Component {
     }
 
     render() {
-
+        console.log("before", this.props.alert);
         let bookresults = [];
+        
         if (this.state.results) {
 
             if (this.state.results.length !== 0) {
 
-                let updatedResponse = this.state.results.map((book) => {
-                    // check if the book.id exists in my collection of books (this.props.books)
-                    this.props.books.forEach((bookOnShelf) => {
-                        // if it does, then add a shelf property with the shelf value to that book
-                        if (bookOnShelf.id === book.id) {
-                            book.shelf = bookOnShelf.shelf; // is this basically the same as not properly using setState?
-                        }
-                    })
-                    return book;
+                // active dropdown item reflects the updated shelf of the book before it is rendered in bookshelves
+                let updatedResponse = this.state.results;
+                //let updatedResponse = this.state.results.map((book, index) => {
+                updatedResponse.map((book, index) => {
+                        //let removedBook = false;
+                    //if (book !== this.props.alert) {
+                        // check if the book.id exists in my collection of books (this.props.books)
+                        this.props.books.forEach((bookOnShelf) => {
+
+                            // if it does, then add a shelf property with the shelf value to that book
+                            if (bookOnShelf.id === book.id) {
+                                //book.shelf = bookOnShelf.shelf;
+                                //updatedResponse.splice(index, 1, bookOnShelf);
+                                updatedResponse[index] = bookOnShelf;
+                                /*if (this.props.alert.id === book.id) {
+                                    removedBook = true;
+                                }*/
+                                
+                            }
+
+
+                        })
+
+                        bookresults.push(
+                            <Col xs={6} sm={4} md={3} key={updatedResponse[index].id}>
+                                <BookShelfItem
+                                    book={updatedResponse[index]}
+                                    size='thumbnail'
+                                    fixedShelves={this.props.fixedShelves}
+                                    onShelfUpdate={this.props.onShelfUpdate}
+                                    //alert={this.props.alert}
+                                    //removedBook={removedBook}
+                                />
+                            </Col>
+                        )
+
+                        
+
+                    /*} else {
+                        book.shelf = this.props.alert.shelf;
+                    }*/
+
+
+                    /*
+                    if (this.props.alert.title === book.title) {
+                        console.log('before ', book.shelf);
+                        book.shelf = this.props.alert.shelf;
+                        console.log('EQUAL titles');
+                        console.log('after ', book.shelf);
+                        console.log('alert shelf ',this.props.alert.shelf);
+                    }*/
+
+                    return updatedResponse; // is this the right thing to return??
                 })
 
+                console.log('updating response');
+                console.log("after", this.props.alert);
 
+                /*
                 updatedResponse.forEach((book) => {
                     bookresults.push(
                         <Col xs={6} sm={4} md={3} key={book.id}>
@@ -135,28 +173,21 @@ class Search extends React.Component {
                                 size='thumbnail'
                                 fixedShelves={this.props.fixedShelves}
                                 onShelfUpdate={this.props.onShelfUpdate}
+                                alert={this.props.alert}
                             />
                         </Col>
                     )
-                })
-            } /*else {
-                if (this.state.query) {
-                    bookresults = (
-                        <div>Sorry, no results for this search</div>
-                    )
-                }
-            }*/
-        } 
+                })*/
+            }
+        }
 
         return (
             <div>
                 <Navbar>
                     <Nav>
-
                         <Link to='/'>
                             <Glyphicon glyph="menu-left" />
                         </Link>
-
                     </Nav>
                     <Navbar.Form>
                         <FormControl
@@ -169,7 +200,7 @@ class Search extends React.Component {
 
                 </Navbar>
 
-                <div>
+                <div className="scrollable-content">
                     <Grid>
                         <Row>
                             {bookresults}
@@ -184,13 +215,3 @@ class Search extends React.Component {
 }
 
 export default Search;
-
-/*
-<SelectMenu
-                            book={book}
-                            shelves={this.shelves}
-                            onShelfUpdate={(book, shelf) => {
-                                this.props.onShelfUpdate(book, shelf);
-                            }}
-                        />
-                        */
