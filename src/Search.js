@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import BookShelfItem from './BookShelfItem';
+import BookItem from './BookItem';
 import * as BooksAPI from './BooksAPI';
 import { Glyphicon } from 'react-bootstrap';
 import { Navbar } from 'react-bootstrap';
@@ -10,6 +10,8 @@ import { Grid } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
 
+
+/* Search component, allows user to search for and add books from the BooksAPI to their shelf collection */
 class Search extends React.Component {
 
     constructor(props) {
@@ -18,65 +20,52 @@ class Search extends React.Component {
             query: '',
             results: []
         }
-        this.shelves = this.props.fixedShelves;
+        this.replaceResultsMatchingShelfCollection = this.replaceResultsMatchingShelfCollection.bind(this);
     }
 
+    /* updates query state and calls results to update */
     updateQuery(query) {
         this.setState({
             query: query
         })
         this.updateResults(query);
-
     }
 
+    /* updates state of results using BooksAPI search method */
     updateResults(query) {
         if (query) {
-
             let queryArray = query.split(' ');
-            console.log(queryArray);
 
-            if (queryArray.length > 1) {
+            // for query of 2+ words, search each term separately and combine results
+            if (queryArray.length > 1 && (queryArray[queryArray.length-1] !== '')) {
                 let promises = [];
-
                 queryArray.forEach((searchTerm) => {
                     let eachPromise = (
                         BooksAPI.search(searchTerm)
                             .then((response) => {
-
-                                // TODO: handle errors properly with reject?
-                                if (response === undefined) {
-                                    console.log('undefined');
-                                    return
-                                } else if (response.error) {
-                                    console.log('error');
-                                    return
-
-                                } else {
+                                if (response != null && response.error == null) {
                                     return response;
+                                } else {
+                                    return [];
                                 }
+                            }).catch((error) => {
+                                console.log(`Error with search: ${error}`);
                             })
                     )
-                    // return something else here?
-                    //return response;
                     promises.push(eachPromise);
-
                 })
-
                 Promise.all(promises).then((values) => {
                     console.log(values);
-                    let accume = [];
+                    let response_combined = [];
                     values.forEach((value) => {
-                        if (value !== undefined) {
-                            accume = accume.concat(value);
-                        }
+                        response_combined = response_combined.concat(value);
                     })
                     this.setState({
-                        results: accume
+                        results: response_combined
                     })
                 })
-
             } else {
-                // do the one-word search below
+                // for 1-word query, search the term entered
                 BooksAPI.search(query)
                     .then((response) => {
                         if (response.error) {
@@ -90,7 +79,7 @@ class Search extends React.Component {
                         }
                     })
             }
-
+            // set state of results to empty if query state is empty
         } else {
             this.setState({
                 results: []
@@ -98,86 +87,46 @@ class Search extends React.Component {
         }
     }
 
-    render() {
-        console.log("before", this.props.alert);
-        let bookresults = [];
-        
-        if (this.state.results) {
+    /* Finds and replaces book objects in search results with matching book objects from shelf collection (this.props.shelfCollection). 
+        * This function is necessary for keeping the state of search results in sync with any updates to the state of books on shelves, rendering accurate dropdown menu changes for each book result
+    */
+    replaceResultsMatchingShelfCollection() {
+        let results_modified = this.state.results;
+        results_modified.forEach((bookObjA, index) => {
+            this.props.shelfCollection.forEach((bookObjB) => {
+                // use book's id property to check for match
+                if (bookObjB.id === bookObjA.id) {
+                    results_modified[index] = bookObjB;
+                }
+            })
+        })
+        return results_modified;
+    }
 
+    /* renders Search component */
+    render() {
+        // initialize array to store BookItem components
+        let bookresults = [];
+
+        if (this.state.results) {
             if (this.state.results.length !== 0) {
 
-                // active dropdown item reflects the updated shelf of the book before it is rendered in bookshelves
-                let updatedResponse = this.state.results;
-                //let updatedResponse = this.state.results.map((book, index) => {
-                updatedResponse.map((book, index) => {
-                        //let removedBook = false;
-                    //if (book !== this.props.alert) {
-                        // check if the book.id exists in my collection of books (this.props.books)
-                        this.props.books.forEach((bookOnShelf) => {
+                // replace results with matching books from shelf collection
+                const results_modified = this.replaceResultsMatchingShelfCollection();
 
-                            // if it does, then add a shelf property with the shelf value to that book
-                            if (bookOnShelf.id === book.id) {
-                                //book.shelf = bookOnShelf.shelf;
-                                //updatedResponse.splice(index, 1, bookOnShelf);
-                                updatedResponse[index] = bookOnShelf;
-                                /*if (this.props.alert.id === book.id) {
-                                    removedBook = true;
-                                }*/
-                                
-                            }
-
-
-                        })
-
-                        bookresults.push(
-                            <Col xs={6} sm={4} md={3} key={updatedResponse[index].id}>
-                                <BookShelfItem
-                                    book={updatedResponse[index]}
-                                    size='thumbnail'
-                                    fixedShelves={this.props.fixedShelves}
-                                    onShelfUpdate={this.props.onShelfUpdate}
-                                    //alert={this.props.alert}
-                                    //removedBook={removedBook}
-                                />
-                            </Col>
-                        )
-
-                        
-
-                    /*} else {
-                        book.shelf = this.props.alert.shelf;
-                    }*/
-
-
-                    /*
-                    if (this.props.alert.title === book.title) {
-                        console.log('before ', book.shelf);
-                        book.shelf = this.props.alert.shelf;
-                        console.log('EQUAL titles');
-                        console.log('after ', book.shelf);
-                        console.log('alert shelf ',this.props.alert.shelf);
-                    }*/
-
-                    return updatedResponse; // is this the right thing to return??
-                })
-
-                console.log('updating response');
-                console.log("after", this.props.alert);
-
-                /*
-                updatedResponse.forEach((book) => {
+                // create and store BookItem component to render
+                results_modified.forEach((book) => {
                     bookresults.push(
                         <Col xs={6} sm={4} md={3} key={book.id}>
-                            <BookShelfItem
+                            <BookItem
                                 book={book}
                                 size='thumbnail'
                                 fixedShelves={this.props.fixedShelves}
                                 onShelfUpdate={this.props.onShelfUpdate}
-                                alert={this.props.alert}
                             />
                         </Col>
                     )
-                })*/
+                })
             }
         }
 
@@ -197,7 +146,6 @@ class Search extends React.Component {
                             onChange={(event) => this.updateQuery(event.target.value)}
                         />
                     </Navbar.Form>
-
                 </Navbar>
 
                 <div className="scrollable-content">
@@ -207,11 +155,9 @@ class Search extends React.Component {
                         </Row>
                     </Grid>
                 </div>
-
             </div>
         )
     }
-
 }
 
 export default Search;

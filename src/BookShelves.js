@@ -1,5 +1,5 @@
 import React from 'react';
-import BookShelfItem from './BookShelfItem';
+import BookItem from './BookItem';
 import { Link } from 'react-router-dom';
 import { Glyphicon } from 'react-bootstrap';
 import { Navbar } from 'react-bootstrap';
@@ -8,52 +8,52 @@ import { Grid } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
 
+/* BookShelves component, provides user with their collection of books organized by shelf */
 class BookShelves extends React.Component {
 
+    /* creates a map of books organized by shelf */
     organizeByShelf(books) {
+        // instantiates map of shelves to store books
         let booksByShelf = new Map();
-
-        // set up fixed shelves (in order listed above) first
         this.props.fixedShelves.forEach((fixedShelf) => {
             booksByShelf.set(fixedShelf, [])
         });
 
-        // add books to all shelves
+        // adds books to their assigned shelves
         books.forEach(book => {
             if (book.shelf !== 'remove') {
                 let shelf = book.shelf;
                 if (booksByShelf.get(shelf) != null) {
-
                     let values = booksByShelf.get(shelf);
                     values.push(book);
                     booksByShelf.set(shelf, values);
-
                 } else {
                     booksByShelf.set(shelf, [book]);
                 }
             }
-
         });
 
         return booksByShelf;
     }
 
+    /* renders BookShelves component */
     render() {
-
-        let bookShelfComponents = [];
+        // array to store book item components for each shelf
+        let bookItemComponents = [];
+        // array to store bookItemComponents arrays
         const bookShelves = [];
+        // map of organized books
         const organized = this.organizeByShelf(this.props.books);
-        console.log(organized);
 
+        // create a BookItem component for each book
         organized.forEach((shelf, shelfKey) => {
             if (shelfKey != null) {
-                let object = { shelfKey: shelfKey, shelf: [] };
-
+                let bookShelfObj = { shelfKey: shelfKey, collection: [] };
                 if (shelf.length !== 0) {
                     shelf.forEach((book) => {
-                        bookShelfComponents.push(
+                        bookItemComponents.push(
                             <Col xs={6} sm={4} md={3} key={book.id}>
-                                <BookShelfItem
+                                <BookItem
                                     book={book}
                                     size='thumbnail'
                                     fixedShelves={this.props.fixedShelves}
@@ -63,19 +63,17 @@ class BookShelves extends React.Component {
                         )
                     })
                 } else {
-                    bookShelfComponents.push(
+                    bookItemComponents.push(
                         <Col xs={6} sm={4} md={3} key={shelfKey}>
-                            <p class="info">This shelf currently has no books</p>
+                            <p className="info">This shelf currently has no books</p>
                         </Col>
                     )
                 }
-                object.shelf = bookShelfComponents;
-                bookShelves.push(object);
-                bookShelfComponents = [];
+                bookShelfObj.collection = bookItemComponents;
+                bookShelves.push(bookShelfObj);
+                bookItemComponents = [];
             }
         })
-
-        console.log(this.props.alert);
 
         return (
             <div>
@@ -88,18 +86,19 @@ class BookShelves extends React.Component {
                 </Link>
 
                 <div className="scrollable-content">
-                    {bookShelves.map((bookshelfObj) => (
-                        <Grid key={bookshelfObj.shelfKey}>
-                            <h3>{
-                                bookshelfObj.shelfKey
-                                    .split(/(?=[A-Z])/)
-                                    .join(' ')
-                                    .toUpperCase()
-                            }</h3>
-
-                            <Row>{bookshelfObj.shelf}</Row>
-                        </Grid>
-                    ))}
+                    {  
+                        bookShelves.map((bookshelfObj) => (
+                            <Grid key={bookshelfObj.shelfKey}>
+                                <h3>{
+                                    bookshelfObj.shelfKey
+                                        .split(/(?=[A-Z])/)
+                                        .join(' ')
+                                        .toUpperCase()
+                                }</h3>
+                                <Row>{bookshelfObj.collection}</Row>
+                            </Grid>
+                        ))
+                    }
                 </div>
             </div>
         )

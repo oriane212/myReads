@@ -1,3 +1,5 @@
+/* Styles for min-width 768px */
+
 body {
   margin: 0;
   padding: 0;
@@ -30,6 +32,7 @@ div.col-xs-6 {
 h3 {
   color: #868686;
   font-weight: 200;
+  margin-left: 12px;
 }
 
 h4 {
@@ -75,7 +78,7 @@ p {
   display: inline;
 }
 
-.booktitle {
+.book-item {
   display: inline;
 }
 
@@ -117,7 +120,7 @@ div.alertMsg p {
 
 .navbar-form .form-control {
   border-style: none;
-  width: 90%;
+  /*width: 90%;*/
   background-color: #f8f8f8;
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -208,7 +211,7 @@ div.scrollable-content {
   top: 270px;
 }
 
-/* MEDIA QUERIES */
+/* Styles for max-width 767px */
 
 @media screen and (max-width: 767px) {
   .glyphicon.glyphicon-menu-left {
@@ -248,10 +251,11 @@ div.scrollable-content {
 
   .noImg {
     background-color: #eee;
-
   }
 
 }
+
+/* Styles for max-width 500px */
 
 @media screen and (max-width: 500px) {
   .container {
@@ -293,6 +297,8 @@ div.scrollable-content {
   }
 
 }
+
+/* Styles for max-width 400px */
 
 @media screen and (max-width: 400px) {
   .col-xs-6 {

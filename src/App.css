@@ -1,8 +1,4 @@
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
+/* Custom create-react-app styles */
 
 .App-header {
   background-color: #30b0d5;
@@ -26,13 +22,6 @@
 .App-intro {
   font-size: large;
 }
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* My reads */
 
 @media screen and (max-width: 500px) {
   .App-header {
