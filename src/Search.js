@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import BookItem from './BookItem';
 import * as BooksAPI from './BooksAPI';
 import { Glyphicon } from 'react-bootstrap';
@@ -9,7 +8,7 @@ import { FormControl } from 'react-bootstrap';
 import { Grid } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
-
+import { NavItem } from 'react-bootstrap';
 
 /* Search component, allows user to search for and add books from the BooksAPI to their shelf collection */
 class Search extends React.Component {
@@ -37,7 +36,7 @@ class Search extends React.Component {
             let queryArray = query.split(' ');
 
             // for query of 2+ words, search each term separately and combine results
-            if (queryArray.length > 1 && (queryArray[queryArray.length-1] !== '')) {
+            if (queryArray.length > 1 && (queryArray[queryArray.length - 1] !== '')) {
                 let promises = [];
                 queryArray.forEach((searchTerm) => {
                     let eachPromise = (
@@ -55,7 +54,6 @@ class Search extends React.Component {
                     promises.push(eachPromise);
                 })
                 Promise.all(promises).then((values) => {
-                    console.log(values);
                     let response_combined = [];
                     values.forEach((value) => {
                         response_combined = response_combined.concat(value);
@@ -87,8 +85,8 @@ class Search extends React.Component {
         }
     }
 
-    /* Finds and replaces book objects in search results with matching book objects from shelf collection (this.props.shelfCollection). 
-        * This function is necessary for keeping the state of search results in sync with any updates to the state of books on shelves, rendering accurate dropdown menu changes for each book result
+    /* finds and replaces book objects in search results with matching book objects from shelf collection (this.props.shelfCollection)
+        * this function is necessary for keeping the state of search results in sync with any updates to the state of books on shelves, rendering accurate dropdown menu changes for each book result
     */
     replaceResultsMatchingShelfCollection() {
         let results_modified = this.state.results;
@@ -110,10 +108,8 @@ class Search extends React.Component {
 
         if (this.state.results) {
             if (this.state.results.length !== 0) {
-
                 // replace results with matching books from shelf collection
                 const results_modified = this.replaceResultsMatchingShelfCollection();
-
                 // create and store BookItem component to render
                 results_modified.forEach((book) => {
                     bookresults.push(
@@ -134,9 +130,9 @@ class Search extends React.Component {
             <div>
                 <Navbar>
                     <Nav>
-                        <Link to='/'>
+                        <NavItem eventKey={1} href='/'>
                             <Glyphicon glyph="menu-left" />
-                        </Link>
+                        </NavItem>
                     </Nav>
                     <Navbar.Form>
                         <FormControl

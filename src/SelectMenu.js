@@ -11,15 +11,16 @@ class SelectMenu extends React.Component {
     render() {
 
         let shelves = this.props.shelves;
-        let shelfValue = "";
-        const menuDivider = 
+        let shelfValue = '';
+
+        // menu item to remove book from collection
+        const menuDivider =
             (<MenuItem divider />)
         let removeItem = '';
-
         if (this.props.book.shelf != null) {
             shelfValue = this.props.book.shelf;
             removeItem = (
-                <MenuItem 
+                <MenuItem
                     key='remove'
                     eventKey='remove'
                     onSelect={(eventKey) => this.props.onShelfUpdate(this.props.book, eventKey)}
@@ -27,10 +28,9 @@ class SelectMenu extends React.Component {
                     Remove book
                 </MenuItem>
             )
-        } 
+        }
 
         return (
-        
             <DropdownButton
                 bsStyle='info'
                 bsSize='small'
@@ -40,26 +40,21 @@ class SelectMenu extends React.Component {
                 className={(shelfValue !== '') ? 'aqua' : 'blue'}
             >
                 <MenuItem header>{this.props.buttonType === 'add' ? 'Add to..' : 'Move to..'}</MenuItem>
-                {
-                    shelves.map((shelf) => {
-                            return (<MenuItem
-                                key={shelf}
-                                eventKey={shelf}
-                                active={(shelf === shelfValue)? true : false}
-                                onSelect={(eventKey) => this.props.onShelfUpdate(this.props.book, eventKey)}>
-                                { 
-                                    shelf
-                                        .split(/(?=[A-Z])/)
-                                        .join(' ')
-                                        .toUpperCase()
-                                }
-                            </MenuItem>)
-                    })
-                }
-
-                {removeItem !== '' ? menuDivider : '' }
-                {removeItem !== '' ? removeItem : '' }
-
+                {shelves.map((shelf) => {
+                    return (<MenuItem
+                        key={shelf}
+                        eventKey={shelf}
+                        active={(shelf === shelfValue) ? true : false}
+                        onSelect={(eventKey) => this.props.onShelfUpdate(this.props.book, eventKey)}>
+                        {shelf
+                            .split(/(?=[A-Z])/)
+                            .join(' ')
+                            .toUpperCase()
+                        }
+                    </MenuItem>)
+                })}
+                {removeItem !== '' ? menuDivider : ''}
+                {removeItem !== '' ? removeItem : ''}
             </DropdownButton>
         )
     }

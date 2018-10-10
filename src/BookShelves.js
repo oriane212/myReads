@@ -1,12 +1,12 @@
 import React from 'react';
 import BookItem from './BookItem';
-import { Link } from 'react-router-dom';
 import { Glyphicon } from 'react-bootstrap';
 import { Navbar } from 'react-bootstrap';
 import { Nav } from 'react-bootstrap';
 import { Grid } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
+import { NavItem } from 'react-bootstrap';
 
 /* BookShelves component, provides user with their collection of books organized by shelf */
 class BookShelves extends React.Component {
@@ -77,13 +77,15 @@ class BookShelves extends React.Component {
 
         return (
             <div>
-                <Link to='/search'>
+                
                     <Navbar>
                         <Nav pullRight>
-                            <Glyphicon glyph="search" />
+                            <NavItem eventKey={2} href='/search'>
+                                <Glyphicon glyph="search" />
+                            </NavItem>
                         </Nav>
                     </Navbar>
-                </Link>
+                
 
                 <div className="scrollable-content">
                     {  
