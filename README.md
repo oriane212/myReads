@@ -2,7 +2,7 @@ My Reads
 ================================
 Search books and add to a collection of currently reading, want to read, and read.
 
-![alt text](docs/myReads_info-add.mp4)
+![demo of searching for and adding a book](docs/myReads.gif)
 
 ## Dependencies
 - All `src` and `public` files (do not move files between folders)
