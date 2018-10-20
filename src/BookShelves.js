@@ -14,8 +14,7 @@ import { NavItem } from 'react-bootstrap';
 class BookShelves extends React.Component {
 
     /**
-     * creates a map of books organized by shelf
-     * returns a something
+     * returns a map of books organized by shelf
      * @param {[]} books
      */
     organizeByShelf(books) {
