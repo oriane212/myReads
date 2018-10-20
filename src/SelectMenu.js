@@ -2,9 +2,9 @@ import React from 'react';
 import { DropdownButton } from 'react-bootstrap';
 import { MenuItem } from 'react-bootstrap';
 
-/* SelectMenu component, provides a dropdown for each BookItem
-    * menu items are generated dynamically from shelves and BookItem's shelf state 
-    * user can add a BookItem to a shelf, move a BookItem already on a shelf to another shelf, or remove it from their collection
+/** SelectMenu component, provides a dropdown for each BookItem.
+    * Menu items are generated dynamically from shelves and BookItem's shelf state. 
+    * User can add a BookItem to a shelf, move a BookItem already on a shelf to another shelf, or remove it from their collection.
 */
 class SelectMenu extends React.Component {
 

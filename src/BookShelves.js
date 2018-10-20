@@ -8,10 +8,16 @@ import { Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
 import { NavItem } from 'react-bootstrap';
 
-/* BookShelves component, provides user with their collection of books organized by shelf */
+/**
+ * BookShelves component, provides user with their collection of books organized by shelf.
+ */
 class BookShelves extends React.Component {
 
-    /* creates a map of books organized by shelf */
+    /**
+     * creates a map of books organized by shelf
+     * returns a something
+     * @param {[]} books
+     */
     organizeByShelf(books) {
         // instantiates map of shelves to store books
         let booksByShelf = new Map();
@@ -77,18 +83,16 @@ class BookShelves extends React.Component {
 
         return (
             <div>
-                
-                    <Navbar>
-                        <Nav pullRight>
-                            <NavItem eventKey={2} href='/search'>
-                                <Glyphicon glyph="search" />
-                            </NavItem>
-                        </Nav>
-                    </Navbar>
-                
+                <Navbar>
+                    <Nav pullRight>
+                        <NavItem eventKey={2} href='/search'>
+                            <Glyphicon glyph="search" />
+                        </NavItem>
+                    </Nav>
+                </Navbar>
 
                 <div className="scrollable-content">
-                    {  
+                    {
                         bookShelves.map((bookshelfObj) => (
                             <Grid key={bookshelfObj.shelfKey}>
                                 <h3>{
@@ -105,7 +109,6 @@ class BookShelves extends React.Component {
             </div>
         )
     }
-
 }
 
 export default BookShelves;

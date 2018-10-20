@@ -7,10 +7,11 @@ import { Route } from 'react-router-dom';
 import { Alert } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 
-/* App component
-  * default route provides user with their collection of books (BookShelves component)
-  * '/search' route provides user with Search component
-  * Alert component is provided when user removes a BookItem
+/**
+  * App component, contains two routes.
+  * The default route '/' provides user with their collection of books (BookShelves component).
+  * The '/search' route provides user with Search component.
+  * Alert component is provided when user removes a BookItem.
 */
 class App extends React.Component {
 

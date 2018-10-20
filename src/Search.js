@@ -10,7 +10,9 @@ import { Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
 import { NavItem } from 'react-bootstrap';
 
-/* Search component, allows user to search for and add books from the BooksAPI to their shelf collection */
+/**
+ * Search component, allows user to search for and add books from the BooksAPI to their shelf collection.
+ */
 class Search extends React.Component {
 
     constructor(props) {

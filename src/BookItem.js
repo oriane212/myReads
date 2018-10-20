@@ -6,10 +6,11 @@ import SelectMenu from './SelectMenu';
 import { Glyphicon } from 'react-bootstrap';
 import { Modal } from 'react-bootstrap';
 
-/* BookItem component, provides a Thumbnail component and a Modal component for each book object
-    * Thumbnail includes a book's cover image, title and author
-    * Modal includes more detailed information in addition to what is provided in the Thumbnail 
-*/
+/**
+ *  BookItem component, provides a Thumbnail component and a Modal component for each book object.
+    * Thumbnail includes a book's cover image, title and author.
+    * Modal includes more detailed information in addition to what is provided in the Thumbnail. 
+**/
 class BookItem extends React.Component {
 
     constructor(props) {
