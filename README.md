@@ -2,6 +2,8 @@ My Reads
 ================================
 Search books and add to a collection of currently reading, want to read, and read.
 
+[View the app!](https://oriane212.github.io/myReads/)
+
 ![demo of searching for and adding a book](docs/myReads.gif)
 
 ## Dependencies
